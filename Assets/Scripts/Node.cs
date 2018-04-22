@@ -4,9 +4,9 @@ using System;
 [System.Serializable]
 public class Node
 {
-    private Vector3 worldPositionRaw = Vector3.zero;
+    private Vector3Int worldPositionRaw = Vector3Int.zero;
 
-    public Vector3 worldPosition
+    public Vector3Int worldPosition
     {
         get { return worldPositionRaw; }
         set { worldPositionRaw = value; }
@@ -20,7 +20,7 @@ public class Node
 
     public bool colored = false;
 
-    public Node(Vector3 _worldPos, int _gridX, int _gridZ, bool _walkable = true)
+    public Node(Vector3Int _worldPos, int _gridX, int _gridZ, bool _walkable = true)
     {
         walkable = _walkable;
         worldPositionRaw = _worldPos;
@@ -46,7 +46,7 @@ public class Node
 
     public void ResetNode()
     {
-        worldPositionRaw = Vector3.zero;
+        worldPositionRaw = Vector3Int.zero;
         gridX = -1;
         gridZ = -1;
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class Grid3D : MonoBehaviour
     [Range(1, 10)] public int gridX = 1;
     [Range(1, 10)] public int gridZ = 1;
 
-    public Vector2 min, max;
+    public Vector2Int min, max;
 
     public bool editMode = false;
 
@@ -24,6 +25,10 @@ public class Grid3D : MonoBehaviour
     [Header("Other Stuff")]
     public GameObject tileHolder;
 
+    [SerializeField]
+    public Material[] nodeMaterials;
+    public int materialIndex = 0;
+    
     public List<GameObject> nodes = new List<GameObject>();
     public List<Node> nodeGrid = new List<Node>();
 
@@ -56,15 +61,7 @@ public class Grid3D : MonoBehaviour
 
     public void RunScan()
     {
-        var start = GameObject.FindGameObjectWithTag("start");
-
-        for (int i = 0; i < gridX; i++)
-        {
-            for (int j = 0; j < gridZ; j++)
-            {
-                this[i, j] = new Node(new Vector3(i, 0, j), i, j, true);
-            }
-        }
+        GameObject start = GameObject.FindGameObjectWithTag("start");
 
         for (int i = 0; i < gridX; i++)
         {
@@ -73,7 +70,7 @@ public class Grid3D : MonoBehaviour
                 Transform child = start.transform.Find(string.Format("{0}, {1}", i, j).ToString());
                 GameObject tile = child.gameObject;
 
-                this[i, j] = new Node(new Vector3(i, 0, j), i, j, true);
+                this[i, j] = new Node(new Vector3Int(i, 0, j), i, j, true);
 
                 nodes.Add(tile);
             }
@@ -90,7 +87,7 @@ public class Grid3D : MonoBehaviour
         return nodes.Find(n => n.GetComponent<BlockItem>().node.gridX == node.gridX && n.GetComponent<BlockItem>().node.gridZ == node.gridZ);
     }
 
-    public IEnumerator<WaitForEndOfFrame> DoPostUpdate()
+    public IEnumerator DoPostUpdate()
     {
         yield return new WaitForEndOfFrame();
 
@@ -102,13 +99,15 @@ public class Grid3D : MonoBehaviour
                 if (child != null)
                 {
                     GameObject tile = child.gameObject;
-                    L.SafeDestroy(tile);
+                    tile.GetComponent<Tile3D>().Disable();
                 }
             }
         }
 
         nodeGrid.Clear();
         nodes.Clear();
+
+        yield return new WaitForSeconds(0.01f);
 
         for (int i = 0; i < gridX; i++)
         {
@@ -117,18 +116,41 @@ public class Grid3D : MonoBehaviour
                 Transform child = start.transform.Find(string.Format("{0}, {1}", i, j).ToString());
                 if (child == null)
                 {
-                    GameObject g = GameObject.Instantiate(tile, new Vector3(i, 0, j), Quaternion.identity);
-                    g.name = string.Format("{0}, {1}", i, j);
-                    g.transform.parent = start.transform;
-                    g.GetComponent<Tile3D>().node = new Node(g.transform.position, i, j);
+                    Tile3DData tile3DData = new Tile3DData
+                    {
+                        name = string.Format("{0}, {1}", i, j),
+                        parent = start.transform
+                    };
 
-                    nodes.Add(g);
-                    nodeGrid.Add(g.GetComponent<Tile3D>().node);
+                    PoolManager.instance.ReuseObject<Tile3DData>(tile, new Vector3Int(i, 0, j), Quaternion.identity, tile3DData);
                 }
             }
         }
 
         if (OnGridResized != null) OnGridResized(gridX, gridZ);
+    }
+
+    public void HoverOnTile(Node node)
+    {
+        try
+        {
+            int x = node.gridX, z = node.gridZ;
+
+            for (int i = 0; i < gridX; i++)
+            {
+                for (int j = 0; j < gridZ; j++)
+                {
+                    if (i == x && j == z)
+                    {
+                        nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/square transparent");
+                    }
+                }
+            }
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+
+        }
     }
 
     public void SelectTile(Node node)
@@ -143,12 +165,12 @@ public class Grid3D : MonoBehaviour
                 {
                     if (i == x && j == z)
                     {
-                        nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/square");
+                        nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = nodeMaterials[materialIndex];
                     }
-                    else
-                    {
-                        nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/square transparent");
-                    }
+                    // else
+                    // {
+                    //     nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/square transparent");
+                    // }
                 }
             }
         }
@@ -192,7 +214,7 @@ public class Grid3D : MonoBehaviour
                 {
                     for (int j = 0; j < gridZ; j++)
                     {
-                        this[i, j] = new Node(new Vector3(i, 0, j), i, j, true);
+                        this[i, j] = new Node(new Vector3Int(i, 0, j), i, j, true);
                     }
                 }
             }

@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
         cameraPosition.z = gridZ % 2 == 0 ? gridZ / 2 - .5f : gridZ / 2;
         cameraPosition.x = gridX % 2 == 0 ? gridX / 2 - .5f : gridX / 2;
 
-        cameraPosition.y = gridX > gridZ ? gridX * 1.5f: gridZ * 1.5f;
+        cameraPosition.y = gridX > gridZ ? gridX * 1.25f: gridZ * 1.25f;
 
         transform.position = cameraPosition;
     }

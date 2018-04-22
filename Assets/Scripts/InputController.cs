@@ -7,11 +7,14 @@ public class InputController : MonoBehaviour
     [SerializeField]
     Tile3D touchedTile;
 
+    [SerializeField]
+    Tile3D hoveredTile;
+
     GameObject start, end;
     RaycastHit raycastHit;
 
     [SerializeField]
-    LayerMask layerForDetectTiles;
+    LayerMask layerForDetectTiles = 1 << 8;
 
     Grid3D grid;
 
@@ -27,7 +30,6 @@ public class InputController : MonoBehaviour
 
     void Update()
     {
-
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -39,7 +41,7 @@ public class InputController : MonoBehaviour
             else
             {
                 touchedTile = null;
-                grid.ResetTiles();
+                // grid.ResetTiles();
             }
         }
     }
@@ -52,7 +54,7 @@ public class InputController : MonoBehaviour
             if (tile == null)
             {
                 touchedTile = null;
-                grid.ResetTiles();
+                // grid.ResetTiles();
             }
             else
             {

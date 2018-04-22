@@ -20,10 +20,29 @@ public class CanvasController : MonoBehaviour
     [SerializeField]
     Text sizeZText;
 
+    [SerializeField]
+    Button brownBrickButton;
+
+    [SerializeField]
+    Button grayBrickButton;
+
     void OnEnable()
     {
+        brownBrickButton.onClick.AddListener(brownBrickButtonClicked);
+        grayBrickButton.onClick.AddListener(grayBrickButtonClicked);
+
         gridSizeXSlider.onValueChanged.AddListener(onXValueChanged);
         gridSizeZSlider.onValueChanged.AddListener(onZValueChanged);
+    }
+
+    private void grayBrickButtonClicked()
+    {
+        grid.materialIndex = 1;
+    }
+
+    private void brownBrickButtonClicked()
+    {
+        grid.materialIndex = 0;
     }
 
     private void onZValueChanged(float value)
@@ -56,10 +75,5 @@ public class CanvasController : MonoBehaviour
 		sizeZText.text = ((int)grid.gridZ).ToString();
 
         StartCoroutine(grid.DoPostUpdate());
-    }
-
-    void Update()
-    {
-
     }
 }

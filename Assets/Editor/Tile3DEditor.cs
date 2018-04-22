@@ -10,20 +10,20 @@ public class Tile3DEditor : Editor
 {
     Tile3D tile3D;
 
-    public override void OnInspectorGUI()
-    {
-        tile3D = target as Tile3D;
+    // public override void OnInspectorGUI()
+    // {
+    //     tile3D = target as Tile3D;
 
-        EditorGUILayout.BeginVertical();
-        {
-            serializedObject.Update();
+    //     EditorGUILayout.BeginVertical();
+    //     {
+    //         serializedObject.Update();
 
-            GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((Tile3D)target), typeof(Tile3D), false);
-            GUI.enabled = true;
-        }
-        EditorGUILayout.EndVertical();
-    }
+    //         GUI.enabled = false;
+    //         EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((Tile3D)target), typeof(Tile3D), false);
+    //         GUI.enabled = true;
+    //     }
+    //     EditorGUILayout.EndVertical();
+    // }
 
     protected virtual void OnSceneGUI()
     {
