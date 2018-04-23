@@ -12,5 +12,5 @@
 
 ![one](https://github.com/jirevwe/paver-tiler/blob/master/0.png)
 ![two](https://github.com/jirevwe/paver-tiler/blob/master/1.png)
-![three](https://github.com/jirevwe/paver-tiler/blob/master/2.png)
+![three](https://github.com/jirevwe/paver-tiler/blob/master/4.png)
 ![four](https://github.com/jirevwe/paver-tiler/blob/master/3.png)
