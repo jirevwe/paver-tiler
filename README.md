@@ -9,7 +9,8 @@
 - [ ] Redo UI :smiley:
 - [ ] Compress `.unity.web` files for upload to server .
 
-[![](0.jpg)]
-[![](1.jpg)]
-[![](2.jpg)]
-[![](3.jpg)]
+
+![one](https://github.com/jirevwe/paver-tiler/blob/master/0.png)
+![two](https://github.com/jirevwe/paver-tiler/blob/master/1.png)
+![three](https://github.com/jirevwe/paver-tiler/blob/master/2.png)
+![four](https://github.com/jirevwe/paver-tiler/blob/master/3.png)
