@@ -27,8 +27,8 @@ public class Grid3D : MonoBehaviour
 
     [SerializeField]
     public Material[] nodeMaterials;
-    public int materialIndex = 0;
-    
+    public int materialIndex = -1;
+
     public List<GameObject> nodes = new List<GameObject>();
     public List<Node> nodeGrid = new List<Node>();
 
@@ -127,6 +127,7 @@ public class Grid3D : MonoBehaviour
             }
         }
 
+        ResetTiles();
         if (OnGridResized != null) OnGridResized(gridX, gridZ);
     }
 
@@ -167,17 +168,11 @@ public class Grid3D : MonoBehaviour
                     {
                         nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = nodeMaterials[materialIndex];
                     }
-                    // else
-                    // {
-                    //     nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/square transparent");
-                    // }
                 }
             }
         }
-        catch (ArgumentOutOfRangeException)
-        {
-
-        }
+        catch (IndexOutOfRangeException) { }
+        catch (ArgumentOutOfRangeException) { }
     }
 
     public void ResetTiles()
@@ -188,7 +183,34 @@ public class Grid3D : MonoBehaviour
             {
                 for (int j = 0; j < gridZ; j++)
                 {
+                    nodes[(i * gridZ) + j].transform.rotation = Quaternion.identity;
                     nodes[(i * gridZ) + j].GetComponent<MeshRenderer>().material = Resources.Load<Material>("Materials/square");
+                }
+            }
+            materialIndex = -1;
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+
+        }
+    }
+
+    public void RotateTile(Node node, bool rotLeft)
+    {
+        try
+        {
+            int x = node.gridX, z = node.gridZ;
+
+            for (int i = 0; i < gridX; i++)
+            {
+                for (int j = 0; j < gridZ; j++)
+                {
+                    if (i == x && j == z)
+                    {
+                        nodes[(i * gridZ) + j].transform.rotation = Quaternion.Euler(nodes[(i * gridZ) + j].transform.rotation.eulerAngles.x,
+                                                                                     rotLeft ? nodes[(i * gridZ) + j].transform.rotation.eulerAngles.y + 90f : nodes[(i * gridZ) + j].transform.rotation.eulerAngles.y - 90f,
+                                                                                     nodes[(i * gridZ) + j].transform.rotation.eulerAngles.z);
+                    }
                 }
             }
         }

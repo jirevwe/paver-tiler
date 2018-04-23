@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    [SerializeField]
-    Tile3D touchedTile;
+    public static InputController Instance;
 
     [SerializeField]
-    Tile3D hoveredTile;
+    public Tile3D touchedTile;
+
+    [SerializeField]
+    public Tile3D hoveredTile;
 
     GameObject start, end;
     RaycastHit raycastHit;
@@ -17,6 +19,11 @@ public class InputController : MonoBehaviour
     LayerMask layerForDetectTiles = 1 << 8;
 
     Grid3D grid;
+
+    void OnEnable()
+    {
+        Instance = this;
+    }
 
     void Awake()
     {
@@ -40,8 +47,7 @@ public class InputController : MonoBehaviour
             }
             else
             {
-                touchedTile = null;
-                // grid.ResetTiles();
+                // touchedTile = null;
             }
         }
     }
@@ -53,8 +59,7 @@ public class InputController : MonoBehaviour
             Tile3D tile = start.transform.GetComponent<Tile3D>();
             if (tile == null)
             {
-                touchedTile = null;
-                // grid.ResetTiles();
+                // touchedTile = null;
             }
             else
             {
